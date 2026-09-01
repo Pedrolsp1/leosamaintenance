@@ -168,3 +168,87 @@ export function availability(periods: StatePeriod[], windowStartMs: number) {
   }
   return total > 0 ? (run / total) * 100 : 0;
 }
+
+export async function fetchAllPeriods(sinceIso: string) {
+  const { data, error } = await supabase
+    .from("machine_state_periods")
+    .select("id, machine_id, state, started_at, ended_at")
+    .gte("started_at", sinceIso)
+    .order("started_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as StatePeriod[];
+}
+
+export async function fetchAllDowntime(sinceIso: string) {
+  const { data, error } = await supabase
+    .from("downtime_events")
+    .select("id, machine_id, started_at, ended_at, reason, reason_code, category, notes")
+    .gte("started_at", sinceIso)
+    .order("started_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as DowntimeEvent[];
+}
+
+export async function fetchAllShifts(sinceIso: string) {
+  const { data, error } = await supabase
+    .from("shifts")
+    .select("id, machine_id, label, operator_name, started_at, ended_at, notes")
+    .gte("started_at", sinceIso)
+    .order("started_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as Shift[];
+}
+
+export interface MachineKpis {
+  availability: number;
+  runHours: number;
+  downHours: number;
+  stops: number;
+  failures: number;
+  /** Mean time to repair (minutes) over closed failure events. */
+  mttrMin: number;
+  /** Mean time between failures (hours): uptime + repair time per failure. */
+  mtbfH: number;
+  /** Mean time to failure (hours): pure uptime per failure. */
+  mttfH: number;
+}
+
+/** KPIs for one machine from its state periods and downtime events in a window. */
+export function machineKpis(
+  periods: StatePeriod[],
+  downtime: DowntimeEvent[],
+  windowStartMs: number,
+): MachineKpis {
+  let runMs = 0;
+  let totalMs = 0;
+  for (const p of periods) {
+    const start = Math.max(new Date(p.started_at).getTime(), windowStartMs);
+    const end = p.ended_at ? new Date(p.ended_at).getTime() : Date.now();
+    const span = Math.max(0, end - start);
+    totalMs += span;
+    if (p.state === "run") runMs += span;
+  }
+
+  const failures = downtime.filter((d) => d.category === "failure");
+  const closedFailures = failures.filter((d) => d.ended_at);
+  const repairSec = closedFailures.reduce(
+    (acc, d) => acc + durationSeconds(d.started_at, d.ended_at),
+    0,
+  );
+
+  const runH = runMs / 3600_000;
+  const downH = (totalMs - runMs) / 3600_000;
+  const n = closedFailures.length;
+  const mttrMin = n ? repairSec / n / 60 : 0;
+
+  return {
+    availability: totalMs > 0 ? (runMs / totalMs) * 100 : 0,
+    runHours: runH,
+    downHours: downH,
+    stops: downtime.length,
+    failures: failures.length,
+    mttrMin,
+    mtbfH: n ? runH / n + repairSec / n / 3600 : 0,
+    mttfH: n ? runH / n : 0,
+  };
+}
