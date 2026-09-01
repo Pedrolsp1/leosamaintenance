@@ -157,3 +157,62 @@
     color: var(--color-foreground);
   }
 }
+
+/* --- SCADA "Annunciator Night" design system --- */
+:root {
+  --shell: #070a12;
+  --deep: #0a0f1c;
+  --panel-2: #0f1526;
+  --raised: #141d31;
+  --line: #232e49;
+  --ink: #e9edf6;
+  --mut: #8a96b6;
+  --dim: #5a678c;
+  --run: #22c55e;
+  --stop: #ef4444;
+  --warn: #f59e0b;
+  --info: #38bdf8;
+
+  --background: var(--shell);
+  --foreground: var(--ink);
+  --card: var(--panel-2);
+  --card-foreground: var(--ink);
+  --popover: var(--panel-2);
+  --popover-foreground: var(--ink);
+  --primary: var(--info);
+  --primary-foreground: var(--deep);
+  --secondary: var(--raised);
+  --secondary-foreground: var(--ink);
+  --muted: var(--raised);
+  --muted-foreground: var(--mut);
+  --accent: var(--raised);
+  --accent-foreground: var(--ink);
+  --destructive: var(--stop);
+  --destructive-foreground: var(--ink);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--info);
+  --radius: 0.5rem;
+}
+
+@keyframes lampPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgb(34 197 94 / 0.5); }
+  50% { opacity: 0.55; box-shadow: 0 0 0 6px rgb(34 197 94 / 0); }
+}
+@keyframes alarmPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgb(239 68 68 / 0.5); }
+  50% { opacity: 0.5; box-shadow: 0 0 0 5px rgb(239 68 68 / 0); }
+}
+
+@utility lamp-run {
+  animation: lampPulse 2.2s ease-in-out infinite;
+}
+
+@utility lamp-alarm {
+  animation: alarmPulse 1.4s ease-in-out infinite;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
