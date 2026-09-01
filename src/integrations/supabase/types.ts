@@ -14,7 +14,188 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      downtime_events: {
+        Row: {
+          category: string
+          created_at: string
+          ended_at: string | null
+          id: string
+          machine_id: string
+          notes: string | null
+          reason: string
+          reason_code: string | null
+          started_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          machine_id: string
+          notes?: string | null
+          reason: string
+          reason_code?: string | null
+          started_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          machine_id?: string
+          notes?: string | null
+          reason?: string
+          reason_code?: string | null
+          started_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "downtime_events_machine_id_fkey"
+            columns: ["machine_id"]
+            isOneToOne: false
+            referencedRelation: "machines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      machine_readings: {
+        Row: {
+          id: number
+          machine_id: string
+          recorded_at: string
+          running: boolean
+          tags: Json
+        }
+        Insert: {
+          id?: number
+          machine_id: string
+          recorded_at?: string
+          running: boolean
+          tags?: Json
+        }
+        Update: {
+          id?: number
+          machine_id?: string
+          recorded_at?: string
+          running?: boolean
+          tags?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "machine_readings_machine_id_fkey"
+            columns: ["machine_id"]
+            isOneToOne: false
+            referencedRelation: "machines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      machine_state_periods: {
+        Row: {
+          created_at: string
+          ended_at: string | null
+          id: string
+          machine_id: string
+          started_at: string
+          state: string
+        }
+        Insert: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          machine_id: string
+          started_at: string
+          state: string
+        }
+        Update: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          machine_id?: string
+          started_at?: string
+          state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "machine_state_periods_machine_id_fkey"
+            columns: ["machine_id"]
+            isOneToOne: false
+            referencedRelation: "machines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      machines: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          line: string
+          model: string
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          line: string
+          model: string
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          line?: string
+          model?: string
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      shifts: {
+        Row: {
+          created_at: string
+          ended_at: string | null
+          id: string
+          label: string
+          machine_id: string | null
+          notes: string | null
+          operator_name: string
+          started_at: string
+        }
+        Insert: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          label: string
+          machine_id?: string | null
+          notes?: string | null
+          operator_name: string
+          started_at?: string
+        }
+        Update: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          label?: string
+          machine_id?: string | null
+          notes?: string | null
+          operator_name?: string
+          started_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shifts_machine_id_fkey"
+            columns: ["machine_id"]
+            isOneToOne: false
+            referencedRelation: "machines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
