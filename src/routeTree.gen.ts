@@ -10,12 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HistoryRouteImport } from './routes/history'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as MachineMachineIdRouteImport } from './routes/machine.$machineId'
 import { Route as ApiPublicIngestRouteImport } from './routes/api/public/ingest'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MachineMachineIdRoute = MachineMachineIdRouteImport.update({
@@ -31,30 +43,46 @@ const ApiPublicIngestRoute = ApiPublicIngestRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
+  '/reports': typeof ReportsRoute
   '/machine/$machineId': typeof MachineMachineIdRoute
   '/api/public/ingest': typeof ApiPublicIngestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
+  '/reports': typeof ReportsRoute
   '/machine/$machineId': typeof MachineMachineIdRoute
   '/api/public/ingest': typeof ApiPublicIngestRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
+  '/reports': typeof ReportsRoute
   '/machine/$machineId': typeof MachineMachineIdRoute
   '/api/public/ingest': typeof ApiPublicIngestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/machine/$machineId' | '/api/public/ingest'
+  fullPaths:
+    '/' | '/history' | '/reports' | '/machine/$machineId' | '/api/public/ingest'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/machine/$machineId' | '/api/public/ingest'
-  id: '__root__' | '/' | '/machine/$machineId' | '/api/public/ingest'
+  to:
+    '/' | '/history' | '/reports' | '/machine/$machineId' | '/api/public/ingest'
+  id:
+    | '__root__'
+    | '/'
+    | '/history'
+    | '/reports'
+    | '/machine/$machineId'
+    | '/api/public/ingest'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HistoryRoute: typeof HistoryRoute
+  ReportsRoute: typeof ReportsRoute
   MachineMachineIdRoute: typeof MachineMachineIdRoute
   ApiPublicIngestRoute: typeof ApiPublicIngestRoute
 }
@@ -66,6 +94,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/machine/$machineId': {
@@ -87,6 +129,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HistoryRoute: HistoryRoute,
+  ReportsRoute: ReportsRoute,
   MachineMachineIdRoute: MachineMachineIdRoute,
   ApiPublicIngestRoute: ApiPublicIngestRoute,
 }
