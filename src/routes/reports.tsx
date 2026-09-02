@@ -27,7 +27,7 @@ export const Route = createFileRoute("/reports")({
       },
     ],
   }),
-  component: Reports;
+  component: Reports,
 });
 
 const WINDOWS = [
