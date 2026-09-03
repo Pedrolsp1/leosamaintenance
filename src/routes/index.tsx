@@ -43,6 +43,14 @@ const BADGE: Record<MachineState, { label: string; cls: string }> = {
   idle: { label: "Parada", cls: "bg-raised text-mut ring-line" },
 };
 
+function artFor(model: string) {
+  const m = (model ?? "").toLowerCase();
+  if (m.includes("akron") || m.includes("biesse")) return edgebanderArt;
+  return machineArt;
+}
+
+
+
 function Sinoptico() {
   const machinesQ = useQuery({ queryKey: ["machines"], queryFn: fetchMachines });
   const currentQ = useQuery({
