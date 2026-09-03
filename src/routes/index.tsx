@@ -5,6 +5,7 @@ import { Radio } from "lucide-react";
 
 import { AppShell } from "@/components/scada/AppShell";
 import machineArt from "@/assets/panel-saw.png";
+import edgebanderArt from "@/assets/edgebander.png";
 import {
   durationSeconds,
   fetchCurrentPeriods,
