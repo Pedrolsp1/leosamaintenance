@@ -31,7 +31,7 @@ function Clock() {
 
 export function AppShell({ children, aside }: { children: ReactNode; aside?: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col bg-shell text-ink">
+    <div className="flex h-screen flex-col overflow-hidden bg-shell text-ink">
       <header className="flex h-14 shrink-0 items-center gap-4 border-b-2 border-info/30 bg-deep px-4">
         <div className="flex w-[212px] shrink-0 items-center gap-2.5">
           <div className="grid h-8 w-12 place-items-center rounded-sm bg-run ring-1 ring-run/60">

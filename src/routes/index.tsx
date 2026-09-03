@@ -5,6 +5,7 @@ import { Radio } from "lucide-react";
 
 import { AppShell } from "@/components/scada/AppShell";
 import machineArt from "@/assets/panel-saw.png";
+import edgebanderArt from "@/assets/edgebander.png";
 import {
   durationSeconds,
   fetchCurrentPeriods,
@@ -42,6 +43,14 @@ const BADGE: Record<MachineState, { label: string; cls: string }> = {
   idle: { label: "Parada", cls: "bg-raised text-mut ring-line" },
 };
 
+function artFor(model: string) {
+  const m = (model ?? "").toLowerCase();
+  if (m.includes("akron") || m.includes("biesse")) return edgebanderArt;
+  return machineArt;
+}
+
+
+
 function Sinoptico() {
   const machinesQ = useQuery({ queryKey: ["machines"], queryFn: fetchMachines });
   const currentQ = useQuery({
@@ -64,31 +73,31 @@ function Sinoptico() {
   return (
     <AppShell
       aside={
-        <div className="m-3 rounded-md bg-panel-2 p-3 ring-1 ring-line/70">
-          <div className="font-mono text-[10px] tracking-[0.14em] text-dim uppercase">
+        <div className="m-2 rounded-md bg-panel-2 px-2.5 py-2 ring-1 ring-line/70">
+          <div className="font-mono text-[9px] tracking-[0.14em] text-dim uppercase">
             Line health
           </div>
-          <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="font-mono text-2xl leading-none font-semibold text-run">
+          <div className="mt-0.5 flex items-baseline gap-1.5">
+            <span className="font-mono text-lg leading-none font-semibold text-run">
               {Math.round(lineHealth)}%
             </span>
-            <span className="text-[11px] text-mut">machines running</span>
+            <span className="text-[10px] text-mut">running</span>
           </div>
         </div>
       }
     >
-      <main className="min-w-0 flex-1 p-5">
-        <div className="rounded-md bg-panel-2 px-5 py-4 ring-1 ring-info/25">
-          <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.18em] text-info uppercase">
+      <main className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-hidden p-3">
+        <div className="shrink-0 rounded-md bg-panel-2 px-4 py-2.5 ring-1 ring-info/25">
+          <div className="flex items-center gap-2 font-mono text-[9px] tracking-[0.18em] text-info uppercase">
             <Radio className="size-3" />
             Monitoramento em tempo real
           </div>
-          <h2 className="mt-2 text-[22px] leading-none font-bold tracking-tight uppercase">
+          <h2 className="mt-1 text-[16px] leading-none font-bold tracking-tight uppercase">
             Visão geral do sistema — {machines.length} ativos
           </h2>
         </div>
 
-        <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid min-h-0 flex-1 grid-cols-2 gap-2.5 lg:grid-cols-3">
           {machines.map((m) => {
             const p = periods[m.id];
             const state = p?.state ?? "idle";
@@ -98,45 +107,46 @@ function Sinoptico() {
                 key={m.id}
                 to="/machine/$machineId"
                 params={{ machineId: m.id }}
-                className="rounded-md bg-panel-2 p-3 ring-1 ring-line/70 transition-colors hover:bg-raised hover:ring-info/40"
+                className="flex min-h-0 flex-col rounded-md bg-panel-2 p-2 ring-1 ring-line/70 transition-colors hover:bg-raised hover:ring-info/40"
               >
-                <div className="text-center font-mono text-[13px] font-semibold tracking-[0.14em] uppercase">
-                  {m.name}
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[11px] font-semibold tracking-[0.12em] uppercase">
+                    {m.name}
+                  </span>
+                  <span
+                    className={`rounded-sm px-1.5 py-0.5 font-mono text-[9px] tracking-[0.12em] uppercase ring-1 ${badge.cls}`}
+                  >
+                    {badge.label}
+                  </span>
                 </div>
 
-                <div
-                  className={`mt-3 rounded-sm px-2.5 py-1.5 font-mono text-[10px] tracking-[0.16em] uppercase ring-1 ${badge.cls}`}
-                >
-                  {badge.label}
-                </div>
-
-                <div className="mt-3 rounded-sm bg-ink/95 p-2">
+                <div className="mt-1.5 grid min-h-0 flex-1 place-items-center overflow-hidden rounded-sm bg-ink/95 p-1">
                   <img
-                    src={machineArt}
-                    alt={`Esquema técnico da máquina ${m.name}`}
+                    src={artFor(m.model)}
+                    alt={`Esquema técnico da máquina ${m.name} (${m.model})`}
                     loading="lazy"
-                    width={1088}
-                    height={608}
-                    className="h-auto w-full"
+                    width={1024}
+                    height={576}
+                    className="max-h-full w-full object-contain"
                   />
                 </div>
 
-                <dl className="mt-3 space-y-1.5">
-                  <div className="flex items-center justify-between rounded-sm bg-raised/70 px-2.5 py-1.5 ring-1 ring-line/60">
-                    <dt className="font-mono text-[11px] text-info">Próxima revisão</dt>
-                    <dd className="font-mono text-[11px] text-mut">—</dd>
+                <dl className="mt-1.5 shrink-0 space-y-1">
+                  <div className="flex items-center justify-between rounded-sm bg-raised/70 px-2 py-1 ring-1 ring-line/60">
+                    <dt className="font-mono text-[10px] text-info">Próxima revisão</dt>
+                    <dd className="font-mono text-[10px] text-mut">—</dd>
                   </div>
-                  <div className="flex items-center justify-between rounded-sm bg-raised/70 px-2.5 py-1.5 ring-1 ring-line/60">
-                    <dt className="font-mono text-[11px] text-info">Última intervenção</dt>
-                    <dd className="font-mono text-[11px] text-ink">
+                  <div className="flex items-center justify-between rounded-sm bg-raised/70 px-2 py-1 ring-1 ring-line/60">
+                    <dt className="font-mono text-[10px] text-info">Última intervenção</dt>
+                    <dd className="font-mono text-[10px] text-ink">
                       {p ? formatClock(p.started_at) : "—"}
                     </dd>
                   </div>
-                  <div className="flex items-center justify-between px-2.5 pt-0.5">
-                    <span className="font-mono text-[10px] tracking-[0.14em] text-dim uppercase">
+                  <div className="flex items-center justify-between px-2">
+                    <span className="font-mono text-[9px] tracking-[0.12em] text-dim uppercase">
                       {m.code} · {m.line}
                     </span>
-                    <span className="font-mono text-[12px] font-semibold text-ink">
+                    <span className="font-mono text-[11px] font-semibold text-ink">
                       {p ? formatDuration(durationSeconds(p.started_at, null)) : "--:--:--"}
                     </span>
                   </div>
@@ -150,6 +160,7 @@ function Sinoptico() {
             </p>
           )}
         </div>
+
       </main>
     </AppShell>
   );
