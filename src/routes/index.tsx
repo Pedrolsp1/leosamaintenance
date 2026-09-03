@@ -5,7 +5,6 @@ import { Radio } from "lucide-react";
 
 import { AppShell } from "@/components/scada/AppShell";
 import machineArt from "@/assets/panel-saw.png";
-import edgebanderArt from "@/assets/edgebander.png";
 import {
   durationSeconds,
   fetchCurrentPeriods,
@@ -42,12 +41,6 @@ const BADGE: Record<MachineState, { label: string; cls: string }> = {
   hold: { label: "Em espera", cls: "bg-warn/15 text-warn ring-warn/45" },
   idle: { label: "Parada", cls: "bg-raised text-mut ring-line" },
 };
-
-function artFor(model: string) {
-  const m = (model ?? "").toLowerCase();
-  if (m.includes("akron") || m.includes("biesse")) return edgebanderArt;
-  return machineArt;
-}
 
 
 
@@ -122,12 +115,12 @@ function Sinoptico() {
 
                 <div className="mt-1.5 grid min-h-0 flex-1 place-items-center overflow-hidden rounded-sm bg-ink/95 p-1">
                   <img
-                    src={artFor(m.model)}
-                    alt={`Esquema técnico da máquina ${m.name} (${m.model})`}
+                    src={machineArt}
+                    alt={`Esquema técnico da máquina ${m.name}`}
                     loading="lazy"
                     width={1024}
                     height={576}
-                    className="max-h-full w-full object-contain"
+                    className="h-full max-h-full w-full object-contain"
                   />
                 </div>
 
