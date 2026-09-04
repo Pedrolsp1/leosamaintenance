@@ -37,16 +37,6 @@ export function AppShell({ children, aside }: { children: ReactNode; aside?: Rea
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-shell text-ink">
       <header className="flex h-14 shrink-0 items-center gap-4 border-b-2 border-info/30 bg-deep px-4">
-        <div className="flex w-[212px] shrink-0 items-center gap-2.5">
-          <img
-            src={leoLogo.url}
-            alt="Leo S.A."
-            width={40}
-            height={40}
-            className="size-9 rounded-sm object-contain ring-1 ring-line/70"
-          />
-        </div>
-
         <h1 className="flex-1 text-center text-[20px] leading-none font-bold tracking-[0.14em] uppercase text-ink">
           Gerenciador de Manutenção
         </h1>
