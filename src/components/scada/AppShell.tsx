@@ -84,7 +84,7 @@ export function AppShell({ children, aside }: { children: ReactNode; aside?: Rea
                 alt="P.L. Controls & Automation"
                 width={180}
                 height={95}
-                className="mt-1 h-14 w-auto object-contain object-left opacity-90"
+                className="mx-auto mt-1 h-14 w-auto object-contain"
               />
             </div>
           </div>
