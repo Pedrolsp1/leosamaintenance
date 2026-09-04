@@ -66,6 +66,15 @@ export function AppShell({ children, aside }: { children: ReactNode; aside?: Rea
 
           <div className="mt-auto">
             {aside}
+            <div className="m-2 rounded-md bg-panel-2 p-2.5 ring-1 ring-line/70">
+              <img
+                src={leoLogo.url}
+                alt="Leo S.A."
+                width={180}
+                height={180}
+                className="mx-auto h-14 w-auto object-contain"
+              />
+            </div>
             <div className="border-t border-line/70 px-3 py-2.5">
               <div className="font-mono text-[8px] tracking-[0.16em] text-dim uppercase">
                 Powered by
