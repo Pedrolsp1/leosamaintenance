@@ -37,6 +37,13 @@ export function AppShell({ children, aside }: { children: ReactNode; aside?: Rea
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-shell text-ink">
       <header className="flex h-14 shrink-0 items-center gap-4 border-b-2 border-info/30 bg-deep px-4">
+        <img
+          src={leoLogo.url}
+          alt="Leo S.A."
+          width={140}
+          height={48}
+          className="h-10 w-auto shrink-0 object-contain"
+        />
         <h1 className="flex-1 text-center text-[20px] leading-none font-bold tracking-[0.14em] uppercase text-ink">
           Gerenciador de Manutenção
         </h1>
@@ -66,15 +73,6 @@ export function AppShell({ children, aside }: { children: ReactNode; aside?: Rea
 
           <div className="mt-auto">
             {aside}
-            <div className="m-2 rounded-md bg-panel-2 p-2.5 ring-1 ring-line/70">
-              <img
-                src={leoLogo.url}
-                alt="Leo S.A."
-                width={180}
-                height={180}
-                className="mx-auto h-14 w-auto object-contain"
-              />
-            </div>
             <div className="m-2 rounded-md bg-panel-2 p-2.5 ring-1 ring-line/70">
               <div className="font-mono text-[9px] tracking-[0.14em] text-dim uppercase">
                 Powered by
