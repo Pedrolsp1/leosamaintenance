@@ -75,8 +75,8 @@ export function AppShell({ children, aside }: { children: ReactNode; aside?: Rea
                 className="mx-auto h-14 w-auto object-contain"
               />
             </div>
-            <div className="border-t border-line/70 px-3 py-2.5">
-              <div className="font-mono text-[8px] tracking-[0.16em] text-dim uppercase">
+            <div className="m-2 rounded-md bg-panel-2 p-2.5 ring-1 ring-line/70">
+              <div className="font-mono text-[9px] tracking-[0.14em] text-dim uppercase">
                 Powered by
               </div>
               <img
@@ -84,7 +84,7 @@ export function AppShell({ children, aside }: { children: ReactNode; aside?: Rea
                 alt="P.L. Controls & Automation"
                 width={180}
                 height={95}
-                className="mt-1 h-6 w-auto object-contain object-left opacity-90"
+                className="mt-1 h-14 w-auto object-contain object-left opacity-90"
               />
             </div>
           </div>
