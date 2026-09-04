@@ -64,21 +64,7 @@ function Sinoptico() {
   const lineHealth = machines.length ? (running / machines.length) * 100 : 0;
 
   return (
-    <AppShell
-      aside={
-        <div className="m-2 rounded-md bg-panel-2 px-2.5 py-2 ring-1 ring-line/70">
-          <div className="font-mono text-[9px] tracking-[0.14em] text-dim uppercase">
-            Line health
-          </div>
-          <div className="mt-0.5 flex items-baseline gap-1.5">
-            <span className="font-mono text-lg leading-none font-semibold text-run">
-              {Math.round(lineHealth)}%
-            </span>
-            <span className="text-[10px] text-mut">running</span>
-          </div>
-        </div>
-      }
-    >
+    <AppShell>
       <main className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-hidden p-3">
         <div className="shrink-0 rounded-md bg-panel-2 px-4 py-2.5 ring-1 ring-info/25">
           <div className="flex items-center gap-2 font-mono text-[9px] tracking-[0.18em] text-info uppercase">

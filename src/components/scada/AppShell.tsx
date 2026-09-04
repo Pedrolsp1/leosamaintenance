@@ -1,10 +1,13 @@
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { LayoutDashboard, FileBarChart2, History as HistoryIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import leoLogo from "@/assets/leo-logo.png.asset.json";
 import plControlsLogo from "@/assets/plcontrols-logo.png.asset.json";
+import { fetchCurrentPeriods, fetchMachines, type MachineState } from "@/lib/scada";
+
 
 
 const NAV = [
