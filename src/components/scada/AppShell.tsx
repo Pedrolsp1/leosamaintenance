@@ -36,6 +36,61 @@ function Clock() {
   );
 }
 
+function LineHealth() {
+  const machinesQ = useQuery({ queryKey: ["machines"], queryFn: fetchMachines });
+  const currentQ = useQuery({
+    queryKey: ["current-periods"],
+    queryFn: fetchCurrentPeriods,
+    refetchInterval: 5000,
+  });
+
+  const { pct, running, total } = useMemo(() => {
+    const machines = machinesQ.data ?? [];
+    const state: Record<string, MachineState> = {};
+    for (const p of currentQ.data ?? []) state[p.machine_id] = p.state;
+    const run = machines.filter((m) => state[m.id] === "run").length;
+    return {
+      running: run,
+      total: machines.length,
+      pct: machines.length ? (run / machines.length) * 100 : 0,
+    };
+  }, [machinesQ.data, currentQ.data]);
+
+  const r = 30;
+  const c = 2 * Math.PI * r;
+  const runLen = (pct / 100) * c;
+
+  return (
+    <div className="m-2 rounded-md bg-panel-2 p-2.5 ring-1 ring-line/70">
+      <div className="font-mono text-[9px] tracking-[0.14em] text-dim uppercase">Line health</div>
+      <div className="relative mx-auto mt-1.5 size-[84px]">
+        <svg viewBox="0 0 80 80" className="size-full -rotate-90">
+          <circle cx="40" cy="40" r={r} fill="none" strokeWidth="9" className="stroke-stop/85" />
+          <circle
+            cx="40"
+            cy="40"
+            r={r}
+            fill="none"
+            strokeWidth="9"
+            strokeLinecap="butt"
+            className="stroke-run"
+            strokeDasharray={`${runLen} ${c - runLen}`}
+          />
+        </svg>
+        <div className="absolute inset-0 grid place-items-center">
+          <span className="font-mono text-lg leading-none font-bold text-ink">
+            {Math.round(pct)}%
+          </span>
+        </div>
+      </div>
+      <div className="mt-1.5 text-center font-mono text-[9px] tracking-[0.12em] text-mut uppercase">
+        {running}/{total} rodando
+      </div>
+    </div>
+  );
+}
+
+
 export function AppShell({ children, aside }: { children: ReactNode; aside?: ReactNode }) {
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-shell text-ink">
@@ -58,7 +113,9 @@ export function AppShell({ children, aside }: { children: ReactNode; aside?: Rea
 
       <div className="flex min-h-0 flex-1">
         <aside className="flex w-[212px] shrink-0 flex-col border-r border-line/70 bg-deep">
-          <nav className="space-y-1 px-2 pt-4">
+          <LineHealth />
+          <nav className="space-y-1 px-2 pt-1">
+
             {NAV.map((item) => (
               <Link
                 key={item.to}
