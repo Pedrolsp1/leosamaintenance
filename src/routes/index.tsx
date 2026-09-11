@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Radio } from "lucide-react";
 
 import { AppShell } from "@/components/scada/AppShell";
+import { MachineModal } from "@/components/scada/MachineModal";
 import machineArt from "@/assets/panel-saw.png";
 import {
   durationSeconds,
