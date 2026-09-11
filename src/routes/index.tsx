@@ -84,11 +84,11 @@ function Sinoptico() {
             const state = p?.state ?? "idle";
             const badge = BADGE[state];
             return (
-              <Link
+              <button
                 key={m.id}
-                to="/machine/$machineId"
-                params={{ machineId: m.id }}
-                className="flex min-h-0 flex-col rounded-md bg-panel-2 p-2 ring-1 ring-line/70 transition-colors hover:bg-raised hover:ring-info/40"
+                type="button"
+                onClick={() => setOpenId(m.id)}
+                className="flex min-h-0 flex-col rounded-md bg-panel-2 p-2 text-left ring-1 ring-line/70 transition-colors hover:bg-raised hover:ring-info/40"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-mono text-[11px] font-semibold tracking-[0.12em] uppercase">
