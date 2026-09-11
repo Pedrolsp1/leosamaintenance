@@ -134,6 +134,49 @@ export async function startShift(machineId: string, label: string, operator: str
   if (error) throw error;
 }
 
+/**
+ * Records an intervention: closes the machine's open state period, opens a new
+ * one with the chosen state, and logs the reason as a downtime event
+ * (closing any open one when the machine goes back to running).
+ */
+export async function registerIntervention(
+  machineId: string,
+  state: MachineState,
+  reason: string,
+) {
+  const now = new Date().toISOString();
+
+  const closePeriod = await supabase
+    .from("machine_state_periods")
+    .update({ ended_at: now })
+    .eq("machine_id", machineId)
+    .is("ended_at", null);
+  if (closePeriod.error) throw closePeriod.error;
+
+  const openPeriod = await supabase
+    .from("machine_state_periods")
+    .insert({ machine_id: machineId, state, started_at: now });
+  if (openPeriod.error) throw openPeriod.error;
+
+  const closeDowntime = await supabase
+    .from("downtime_events")
+    .update({ ended_at: now })
+    .eq("machine_id", machineId)
+    .is("ended_at", null);
+  if (closeDowntime.error) throw closeDowntime.error;
+
+  if (state !== "run") {
+    const logDowntime = await supabase.from("downtime_events").insert({
+      machine_id: machineId,
+      started_at: now,
+      reason,
+      category: state === "stop" ? "failure" : "planned",
+      notes: reason,
+    });
+    if (logDowntime.error) throw logDowntime.error;
+  }
+}
+
 export function hoursAgoIso(hours: number) {
   return new Date(Date.now() - hours * 3600_000).toISOString();
 }
