@@ -132,7 +132,7 @@ function Sinoptico() {
                     </span>
                   </div>
                 </dl>
-              </Link>
+              </button>
             );
           })}
           {!machines.length && (
@@ -142,6 +142,14 @@ function Sinoptico() {
           )}
         </div>
 
+        {openMachine ? (
+          <MachineModal
+            machine={openMachine}
+            state={periods[openMachine.id]?.state ?? "idle"}
+            startedAt={periods[openMachine.id]?.started_at ?? null}
+            onClose={() => setOpenId(null)}
+          />
+        ) : null}
       </main>
     </AppShell>
   );
