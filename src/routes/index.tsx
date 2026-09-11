@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Radio } from "lucide-react";
 
 import { AppShell } from "@/components/scada/AppShell";
+import { MachineModal } from "@/components/scada/MachineModal";
 import machineArt from "@/assets/panel-saw.png";
 import {
   durationSeconds,
@@ -60,8 +61,9 @@ function Sinoptico() {
     return map;
   }, [currentQ.data]);
 
-  const running = machines.filter((m) => periods[m.id]?.state === "run").length;
-  const lineHealth = machines.length ? (running / machines.length) * 100 : 0;
+  const [openId, setOpenId] = useState<string | null>(null);
+  const openMachine = machines.find((m) => m.id === openId) ?? null;
+
 
   return (
     <AppShell>
@@ -82,11 +84,11 @@ function Sinoptico() {
             const state = p?.state ?? "idle";
             const badge = BADGE[state];
             return (
-              <Link
+              <button
                 key={m.id}
-                to="/machine/$machineId"
-                params={{ machineId: m.id }}
-                className="flex min-h-0 flex-col rounded-md bg-panel-2 p-2 ring-1 ring-line/70 transition-colors hover:bg-raised hover:ring-info/40"
+                type="button"
+                onClick={() => setOpenId(m.id)}
+                className="flex min-h-0 flex-col rounded-md bg-panel-2 p-2 text-left ring-1 ring-line/70 transition-colors hover:bg-raised hover:ring-info/40"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-mono text-[11px] font-semibold tracking-[0.12em] uppercase">
@@ -130,7 +132,7 @@ function Sinoptico() {
                     </span>
                   </div>
                 </dl>
-              </Link>
+              </button>
             );
           })}
           {!machines.length && (
@@ -140,6 +142,14 @@ function Sinoptico() {
           )}
         </div>
 
+        {openMachine ? (
+          <MachineModal
+            machine={openMachine}
+            state={periods[openMachine.id]?.state ?? "idle"}
+            startedAt={periods[openMachine.id]?.started_at ?? null}
+            onClose={() => setOpenId(null)}
+          />
+        ) : null}
       </main>
     </AppShell>
   );
