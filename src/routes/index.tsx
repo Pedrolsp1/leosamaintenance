@@ -61,8 +61,9 @@ function Sinoptico() {
     return map;
   }, [currentQ.data]);
 
-  const running = machines.filter((m) => periods[m.id]?.state === "run").length;
-  const lineHealth = machines.length ? (running / machines.length) * 100 : 0;
+  const [openId, setOpenId] = useState<string | null>(null);
+  const openMachine = machines.find((m) => m.id === openId) ?? null;
+
 
   return (
     <AppShell>
